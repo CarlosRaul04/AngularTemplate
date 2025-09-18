@@ -1,12 +1,15 @@
 <!-- Layout general -->
 <div class="min-h-screen flex flex-col bg-white text-black">
-
   <!-- Header: en móvil se apila; en sm+ va en fila -->
-  <header class="bg-primary h-medium sm:h-small text-white p-large gap-medium  flex flex-col sm:flex-row sm:items-center sm:justify-between">
+  <header
+    class="bg-primary h-medium sm:h-small text-white p-large gap-medium flex flex-col sm:flex-row sm:items-center sm:justify-between"
+  >
     <div class="text-heading font-bold">NEOS UI TEMPLATE</div>
 
-    <div class="flex flex-col gap-x-small gap-y-xsmall sm:flex-row sm:items-center sm:gap-small"
-         *ngIf="auth.user$ | async as user">
+    <div
+      class="flex flex-col gap-x-small gap-y-xsmall sm:flex-row sm:items-center sm:gap-small"
+      *ngIf="auth.user$ | async as user"
+    >
       <span class="text-small">👤 {{ user.nombre }} {{ user.apellido }}</span>
       <button class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
     </div>
@@ -14,13 +17,10 @@
 
   <!-- Cuerpo: en móvil columna (sidebar primero, contenido debajo); en sm+ fila -->
   <main class="flex flex-col sm:flex-row grow p-medium gap-medium">
-
     <!-- Sidebar: 100% ancho en móvil; ancho fijo en sm+  -->
     <aside
-      class="w-auto flex flex-col gap-small
-             rounded-medium border-style-solid border-primary
-             p-medium gap-large bg-primary text-white
-             sm:basis-sidebar md:basis-sidebar-md lg:basis-sidebar-lg sm:w-medium">
+      class="w-auto flex flex-col gap-small rounded-medium border-style-solid border-primary p-medium gap-large bg-primary text-white sm:basis-sidebar md:basis-sidebar-md lg:basis-sidebar-lg sm:w-medium"
+    >
       <div class="text-small font-bold">📁 Menú</div>
       <button class="btn btn-info">Dashboard</button>
       <button class="btn btn-info">Componentes</button>
@@ -31,7 +31,7 @@
     <!-- Contenido principal -->
     <section class="grow flex flex-col gap-medium" *ngIf="auth.user$ | async as user">
       <!-- Bienvenida -->
-      <div class=" bg-primary p-medium rounded-medium text-white shadow-md">
+      <div class="bg-primary p-medium rounded-medium text-white shadow-md">
         <h2 class="text-heading font-bold mb-small">
           ¡Bienvenido, {{ user.nombre }} {{ user.apellido }}!
         </h2>
@@ -43,7 +43,7 @@
 
       <!-- Tarjetas de ejemplo: apiladas en móvil; 3 columnas en md+ -->
       <div class="flex flex-col sm:flex-col md:flex-row gap-large p-large h-full">
-        <div class="bg-success text-white p-small rounded  shadow-sm md:basis-1/3">
+        <div class="bg-success text-white p-small rounded shadow-sm md:basis-1/3">
           <div class="font-bold mb-small">Estado</div>
           <p class="text-small opacity-90">Todo funcionando 🚀</p>
         </div>

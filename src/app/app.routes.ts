@@ -6,13 +6,17 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('../app/features/auth/login/login.component').then(m => m.LoginComponent),
+      import('../app/presentation/features/auth/login/login.component').then(
+        (m) => m.LoginComponent,
+      ),
   },
   {
     path: 'welcome',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('../app/features/welcome/welcome.component').then(m => m.WelcomeComponent),
+      import('../app/presentation/features/welcome/welcome.component').then(
+        (m) => m.WelcomeComponent,
+      ),
   },
   { path: '**', redirectTo: 'welcome' },
 ];

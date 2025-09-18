@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize, take } from 'rxjs/operators';
-import { AuthService } from '@core/auth/auth.service';
+import { LoginUseCaseImpl } from '@app/application/auth/login.usecase.impl';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,7 @@ import { AuthService } from '@core/auth/auth.service';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService);
+  private loginUseCase = inject(LoginUseCaseImpl);
   private router = inject(Router);
 
   private _loading = signal(false);
@@ -24,7 +24,9 @@ export class LoginComponent {
   error = () => this._error();
 
   showPwd = signal(false);
-  togglePwd() { this.showPwd.set(!this.showPwd()); }
+  togglePwd() {
+    this.showPwd.set(!this.showPwd());
+  }
 
   form = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -36,12 +38,15 @@ export class LoginComponent {
     this._error.set('');
     this._loading.set(true);
 
-    this.auth.login(this.form.getRawValue()).pipe(
-      take(1),
-      finalize(() => this._loading.set(false))
-    ).subscribe({
-      next: () => this.router.navigateByUrl('/welcome'),
-      error: () => this._error.set('Credenciales inválidas')
-    });
+    this.loginUseCase
+      .execute(this.form.getRawValue())
+      .pipe(
+        take(1),
+        finalize(() => this._loading.set(false)),
+      )
+      .subscribe({
+        next: () => this.router.navigateByUrl('/welcome'),
+        error: () => this._error.set('Credenciales inválidas'),
+      });
   }
 }

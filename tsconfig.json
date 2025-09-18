@@ -23,8 +23,8 @@
       "@core/*": ["app/core/*"],
       "@shared/*": ["app/shared/*"],
       "@domain/*": ["app/domain/*"],
-      "@infra/*": ["app/infra/*"],
-      "@features/*": ["app/features/*"]
+      "@infra/*": ["app/infrastructure/*"],
+      "@presentation/*": ["app/presentation/*"]
     },
 
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
