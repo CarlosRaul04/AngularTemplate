@@ -1,21 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '@core/auth/auth.service';
-import { Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { AuthFacade } from '@app/presentation/facades/auth.facade';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [CommonModule],
+  imports: [AsyncPipe],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent {
-  auth = inject(AuthService);
-  private router = inject(Router);
+  //auth = inject(AuthService);
+  authFacade = inject(AuthFacade);
 
-  logout() {
-    this.auth.logout();
-    this.router.navigateByUrl('/login');
-  }
+  user$ = this.authFacade.user$();
 }

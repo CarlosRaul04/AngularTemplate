@@ -1,20 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize, take } from 'rxjs/operators';
-import { LoginUseCaseImpl } from '@app/application/auth/login.usecase.impl';
+import { AuthFacade } from '@app/presentation/facades/auth.facade';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
-  private loginUseCase = inject(LoginUseCaseImpl);
+  private authFacade = inject(AuthFacade);
   private router = inject(Router);
 
   private _loading = signal(false);
@@ -25,7 +24,7 @@ export class LoginComponent {
 
   showPwd = signal(false);
   togglePwd() {
-    this.showPwd.set(!this.showPwd());
+    this.showPwd.update(() => !this.showPwd());
   }
 
   form = this.fb.nonNullable.group({
@@ -38,8 +37,8 @@ export class LoginComponent {
     this._error.set('');
     this._loading.set(true);
 
-    this.loginUseCase
-      .execute(this.form.getRawValue())
+    this.authFacade
+      .login(this.form.getRawValue())
       .pipe(
         take(1),
         finalize(() => this._loading.set(false)),

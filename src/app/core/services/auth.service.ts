@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { environment as enviromentProd } from '../../../environments/environment.prod';
 
 export interface User {
   username: string;
@@ -10,6 +11,10 @@ export interface User {
   apellido?: string;
   email?: string;
 }
+
+type ApiUser = Partial<User> & {
+  user?: string;
+};
 
 type LoginReq = { username: string; password: string };
 
@@ -23,8 +28,9 @@ export class AuthService {
   user$ = this._user$.asObservable();
 
   private hydrated$?: Observable<boolean>;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
+  constructor() {
     // -- logs de diagnóstico (borra cuando verifiques) ------------------------
     // console.log('[ENV] production=', environment.production, 'mode=', environment.auth.mode);
     // console.log('[ENV] base=', environment.auth.base, 'USE_MOCK=', USE_MOCK);
@@ -32,7 +38,7 @@ export class AuthService {
     this.ensureSession().subscribe();
   }
 
-  private mapApiUser(api: any): User {
+  private mapApiUser(api: ApiUser): User {
     return {
       username: api?.username ?? api?.user ?? '',
       nombre: api?.nombre,
@@ -47,25 +53,26 @@ export class AuthService {
     if (this.hydrated$) return this.hydrated$;
 
     if (USE_MOCK) {
-      // En mock no auto-logueamos
-      this._user$.next(null);
-      this.hydrated$ = of(false).pipe(shareReplay(1));
-      return this.hydrated$;
+      const savedUser = localStorage.getItem('mockUser');
+      if (savedUser) {
+        // En mock no auto-logueamos
+        this._user$.next(JSON.parse(savedUser));
+        this.hydrated$ = of(true).pipe(shareReplay(1));
+        return this.hydrated$;
+      }
     }
 
-    const base = environment.auth.base;
-    this.hydrated$ = this.http
-      .get<any>(`${base}/current-user`, { withCredentials: true })
-      .pipe(
-        map((api) => this.mapApiUser(api)),
-        tap((u) => this._user$.next(u)),
-        map(() => true),
-        catchError(() => {
-          this._user$.next(null);
-          return of(false);
-        }),
-        shareReplay(1)
-      );
+    const base = enviromentProd.auth.base;
+    this.hydrated$ = this.http.get<ApiUser>(`${base}/current-user`, { withCredentials: true }).pipe(
+      map((api) => this.mapApiUser(api)),
+      tap((u) => this._user$.next(u)),
+      map(() => true),
+      catchError(() => {
+        this._user$.next(null);
+        return of(false);
+      }),
+      shareReplay(1),
+    );
 
     return this.hydrated$;
   }
@@ -73,25 +80,25 @@ export class AuthService {
   /** Login: mock (solo en dev) o remoto (prod). */
   login(body: LoginReq): Observable<User> {
     if (USE_MOCK) {
-      const mc = environment.auth.mockCreds!;
-      if (body.username === mc.username && body.password === mc.password) {
-        const u = environment.auth.mockUser!;
-        this._user$.next(u);
-        return of(u);
+      const mockCredentials = environment.auth.mockCreds!;
+      if (
+        body.username === mockCredentials.username &&
+        body.password === mockCredentials.password
+      ) {
+        const user = environment.auth.mockUser!;
+        this._user$.next(user);
+        localStorage.setItem('mockUser', JSON.stringify(user));
+        return of(user);
       }
       return throwError(() => new Error('Credenciales inválidas'));
     }
 
-    const base = environment.auth.base;
-    return this.http
-      .post(`${base}/login`, body, { withCredentials: true })
-      .pipe(
-        switchMap(() =>
-          this.http.get<any>(`${base}/current-user`, { withCredentials: true })
-        ),
-        map((api) => this.mapApiUser(api)),
-        tap((u) => this._user$.next(u))
-      );
+    const base = enviromentProd.auth.base;
+    return this.http.post(`${base}/login`, body, { withCredentials: true }).pipe(
+      switchMap(() => this.http.get<ApiUser>(`${base}/current-user`, { withCredentials: true })),
+      map((api) => this.mapApiUser(api)),
+      tap((u) => this._user$.next(u)),
+    );
   }
 
   logout(): void {
@@ -99,16 +106,15 @@ export class AuthService {
 
     if (USE_MOCK) {
       this._user$.next(null);
+      localStorage.removeItem('mockUser');
       return;
     }
 
-    const base = environment.auth.base;
-    this.http
-      .post(`${base}/logout`, {}, { withCredentials: true })
-      .subscribe({
-        complete: () => this._user$.next(null),
-        error: () => this._user$.next(null),
-      });
+    const base = enviromentProd.auth.base;
+    this.http.post(`${base}/logout`, {}, { withCredentials: true }).subscribe({
+      complete: () => this._user$.next(null),
+      error: () => this._user$.next(null),
+    });
   }
 
   isLoggedIn(): boolean {

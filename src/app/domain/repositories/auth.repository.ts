@@ -8,5 +8,6 @@ export interface LoginRequest {
 
 export abstract class AuthRepository {
   abstract login(request: LoginRequest): Observable<User>;
+  abstract getUser$(): Observable<User | null>;
   abstract logout(): void;
 }

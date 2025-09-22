@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 function goLogin(router: Router): UrlTree {
   return router.createUrlTree(['/login']);
@@ -10,5 +10,5 @@ function goLogin(router: Router): UrlTree {
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  return auth.ensureSession().pipe(map(ok => (ok ? true : goLogin(router))));
+  return auth.ensureSession().pipe(map((ok) => (ok ? true : goLogin(router))));
 };

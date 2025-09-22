@@ -2,9 +2,12 @@
   "name": "neos-template",
   "version": "0.0.0",
   "lint-staged": {
-    "*.{ts,js,css,html,scss}": [
+    "*.{ts,js}": [
       "prettier -w",
       "eslint --fix"
+    ],
+    "*.{scss,css,html}": [
+      "prettier -w"
     ],
     "*.md": [
       "prettier --write"
@@ -36,6 +39,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.4",
     "@angular/common": "^20.2.0",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",

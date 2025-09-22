@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from '@app/core/auth/auth.service';
+import { AuthService } from '@app/core/services/auth.service';
 import { User } from '@app/domain/entities/user.entity';
 import { AuthRepository, LoginRequest } from '@app/domain/repositories/auth.repository';
 import { map, Observable } from 'rxjs';
@@ -23,7 +23,22 @@ export class AuthRepositoryImpl extends AuthRepository {
     );
   }
 
-  override logout(): void {
+  logout(): void {
     return this.authService.logout();
+  }
+
+  getUser$(): Observable<User | null> {
+    return this.authService.user$.pipe(
+      map((apiUser) =>
+        apiUser
+          ? {
+              username: apiUser.username,
+              nombre: apiUser.nombre ?? '',
+              apellido: apiUser.apellido ?? '',
+              email: apiUser.email ?? '',
+            }
+          : null,
+      ),
+    );
   }
 }

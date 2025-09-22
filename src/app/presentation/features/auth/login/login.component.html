@@ -41,8 +41,9 @@
       </div>
 
       <!-- Error -->
-      <p class="text-small text-danger" *ngIf="error()">{{ error() }}</p>
-
+      @if (error()) {
+        <p class="text-small text-danger">{{ error() }}</p>
+      }
       <!-- Submit -->
       <button class="btn btn-primary mt-small w-full" [disabled]="loading()">Entrar</button>
     </form>
