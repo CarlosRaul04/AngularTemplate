@@ -53,13 +53,14 @@ export class AuthService {
     if (this.hydrated$) return this.hydrated$;
 
     if (USE_MOCK) {
-      const savedUser = localStorage.getItem('mockUser');
-      if (savedUser) {
-        // En mock no auto-logueamos
-        this._user$.next(JSON.parse(savedUser));
-        this.hydrated$ = of(true).pipe(shareReplay(1));
-        return this.hydrated$;
-      }
+      //const savedUser = localStorage.getItem('mockUser');
+      //if (savedUser) {
+      // En mock no auto-logueamos
+      //this._user$.next(JSON.parse(savedUser));
+      this._user$.next(null);
+      this.hydrated$ = of(false).pipe(shareReplay(1));
+      return this.hydrated$;
+      //}
     }
 
     const base = enviromentProd.auth.base;

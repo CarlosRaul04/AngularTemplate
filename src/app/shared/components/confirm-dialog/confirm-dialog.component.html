@@ -3,7 +3,7 @@
 >
   <h2 class="font-bold">{{ data.title }}</h2>
   <p class="mb-small text-base">{{ data.message }}</p>
-  <div class="flex flex-col sm:flex-col md:flex-row gap-large p-medium">
+  <div class="flex flex-col sm:flex-row md:flex-row gap-large p-medium">
     <button class="btn btn-danger" (click)="onCancel()">
       {{ data.cancelText || 'Cancelar' }}
     </button>
