@@ -1,0 +1,1 @@
+import{Ka as n,hb as s,ib as o,tb as i}from"./chunk-BA6MHJFO.js";var p=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=n({type:e,selectors:[["app-settings"]],decls:2,vars:0,template:function(t,m){t&1&&(s(0,"p"),i(1,"settings works!"),o())},encapsulation:2})};export{p as SettingsComponent};

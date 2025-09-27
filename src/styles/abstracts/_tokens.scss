@@ -1,0 +1,17 @@
+@use "sass:map";
+
+$colors: (
+    primary: #2a3ef4,
+    accent: #2eff5a,
+    dark: #050033,
+    text: #555555,
+    white: #ffffff
+);
+
+
+@function color($key){
+    @return map.get($colors , $key);
+}
+
+
+

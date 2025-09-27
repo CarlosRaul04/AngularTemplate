@@ -1,0 +1,6 @@
+@mixin elevation($level: 1) {
+    @if $level == 1 { box-shadow: 0 1px 3px rgba(0,0,0,.12)}
+    @else if $level == 2 { box-shadow: 0 4px 8px rgba(0,0,0,.14);}
+}
+
+%clickable { cursor: pointer; user-select: none;}

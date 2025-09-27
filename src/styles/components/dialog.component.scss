@@ -1,0 +1,91 @@
+@use '../abstracts/breakpoints' as bp;
+@use '../abstracts/mixins' as mx;
+@use '../abstracts/tokens' as tk;
+
+.dialog {
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+  }
+
+  &__panel {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none; // bloquea clicks si no está open
+    z-index: 1001;
+  }
+
+  &__content {
+    pointer-events: auto;
+    background: tk.color(white);
+    color: tk.color(text);
+    border-radius: 12px;
+    width: 92vw;
+    max-width: 560px;
+    padding: 1rem;
+    @include mx.elevation(2);
+
+    @include bp.mq(md) {
+      padding: 1.25rem;
+    }
+    @include bp.mq(lg) {
+      padding: 1.5rem;
+      max-width: 720px;
+    }
+  }
+
+  &__header,
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  &__header {
+    justify-content: space-between;
+  }
+  &__title {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+  &__body {
+    margin: 0.75rem 0 1rem;
+  }
+
+  &__close {
+    @extend %clickable;
+    border: none;
+    background: transparent;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  // Modifiers
+  &--open {
+    .dialog__backdrop {
+      opacity: 1;
+    }
+    .dialog__panel {
+      /* puedes animar entrada del content */
+    }
+  }
+
+  &--sm .dialog__content {
+    max-width: 420px;
+  }
+  &--lg .dialog__content {
+    max-width: 900px;
+  }
+
+  &--danger .dialog__header {
+    border-bottom: 2px solid #e11d48;
+  }
+  &--success .dialog__header {
+    border-bottom: 2px solid #16a34a;
+  }
+}

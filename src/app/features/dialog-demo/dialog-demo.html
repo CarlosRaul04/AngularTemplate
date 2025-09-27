@@ -1,0 +1,68 @@
+<div class="p-6 flex flex-col gap-large">
+  <h1 class="text-heading">Demo de Dialog</h1>
+
+  <!-- PRUEBA DEL DIALOG -->
+
+  <button class="btn btn-accent w-medium" (click)="openDialog()">
+    Abrir Dialog
+  </button>
+
+  <app-dialog
+    [open]="isOpen"
+    (closed)="onClosed()"
+    size="md"
+    variant="success"
+  >
+    <div dialog-title>Confirmar acción</div>
+
+    <div dialog-body>
+      ¿Estás seguro de que quieres continuar con esta acción?  
+      Esta operación no se puede deshacer.
+    </div>
+
+    <div dialog-footer class="flex flex-col sm:flex-row grow p-medium gap-medium">
+      <button class="btn btn-secondary" (click)="onClosed()">Cancelar</button>
+      <button class="btn btn-primary" (click)="onClosed()">Aceptar</button>
+    </div>
+  </app-dialog>
+
+
+  <!-- PRUEBA DEL CARD -->
+  <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    
+    <app-card class="card--elevated">
+      <div card-title>Card Simple</div>
+      <div card-meta>Meta Info</div>
+      <div card-body>
+        Esta es una card básica y reutilizable
+      </div>
+      <div card-actions>
+        <button class="btn btn-primary">Acción</button>
+      </div>
+    </app-card>
+
+    <app-card class="card--highlight">
+      <div card-title>Card Destacada</div>
+      <div card-meta>Meta secundaria</div>
+      <div card-body>
+        Esta card usa el modificador <code>.card--highlight</code>
+      </div>
+      <div card-actions>
+        <button class="btn btn-secondary">Cancelar</button>
+        <button class="btn btn-primary">Acción</button>
+      </div>
+    </app-card>
+
+    <app-card class="card--elevated card--highlight">
+      <div card-title>Card completa</div>
+      <div card-meta>con ambos modificadores</div>
+      <div card-body>
+        Esta combina <code>.card--elevated</code> y <code>.card--highlight</code>.
+      </div>
+      <div card-actions>
+        <button class="btn btn-primary">Ir</button>
+      </div>
+    </app-card>
+  </div>
+
+</div>

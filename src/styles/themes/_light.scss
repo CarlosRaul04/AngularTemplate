@@ -1,0 +1,8 @@
+@use '../abstracts/tokens' as t;
+
+.theme--light {
+    --color-bg: #{t.color(white)};
+    --color-text: #{t.color(text)};
+    --colot-primary: #{t.color(primary)};
+    --color-accent: #{t.color(accent)};
+}

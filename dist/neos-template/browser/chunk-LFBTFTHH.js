@@ -1,0 +1,1 @@
+import{Ka as o,hb as t,ib as p,tb as s}from"./chunk-BA6MHJFO.js";var m=class n{static \u0275fac=function(e){return new(e||n)};static \u0275cmp=o({type:n,selectors:[["app-components"]],decls:2,vars:0,template:function(e,c){e&1&&(t(0,"p"),s(1,"components works!"),p())},encapsulation:2})};export{m as ComponentsComponent};

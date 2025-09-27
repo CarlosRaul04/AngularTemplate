@@ -2,11 +2,14 @@
 <div class="min-h-screen flex flex-col bg-white text-black">
 
   <!-- Header: en móvil se apila; en sm+ va en fila -->
-  <header class="bg-primary h-medium sm:h-small text-white p-large gap-medium  flex flex-col sm:flex-row sm:items-center sm:justify-between">
+  <header class=" h-medium sm:h-small p-large gap-medium  flex flex-col sm:flex-row sm:items-center sm:justify-between border-large border-style-solid border-black ">
     <div class="text-heading font-bold">NEOS UI TEMPLATE</div>
 
     <div class="flex flex-col gap-x-small gap-y-xsmall sm:flex-row sm:items-center sm:gap-small"
          *ngIf="auth.user$ | async as user">
+      <button class="btn btn-accent" (click)="toggleTheme()">
+        Switch to {{ theme.active === 'light' ? 'dark' : 'light' }} mode
+      </button>
       <span class="text-small">👤 {{ user.nombre }} {{ user.apellido }}</span>
       <button class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
     </div>
@@ -19,27 +22,28 @@
     <aside
       class="w-auto flex flex-col gap-small
              rounded-medium border-style-solid border-primary
-             p-medium gap-large bg-primary text-white
+             p-medium gap-large
              sm:basis-sidebar md:basis-sidebar-md lg:basis-sidebar-lg sm:w-medium">
       <div class="text-small font-bold">📁 Menú</div>
       <button class="btn btn-info">Dashboard</button>
       <button class="btn btn-info">Componentes</button>
       <button class="btn btn-info">Documentación</button>
       <button class="btn btn-info">Ajustes</button>
+      <button class="btn btn-info text-center" [routerLink]="'/dialog-demo'">Demo Dialog y Card</button>
     </aside>
 
     <!-- Contenido principal -->
-    <section class="grow flex flex-col gap-medium" *ngIf="auth.user$ | async as user">
+    <div class="grow flex flex-col gap-medium bg-white" *ngIf="auth.user$ | async as user">
       <!-- Bienvenida -->
-      <div class=" bg-primary p-medium rounded-medium text-white shadow-md">
-        <h2 class="text-heading font-bold mb-small">
+      <section class=" p-medium rounded-medium shadow-md border-large border-style-solid border-black">
+        <h2 class="text-heading font-bold mb-small ">
           ¡Bienvenido, {{ user.nombre }} {{ user.apellido }}!
         </h2>
         <p class="text-body">
           <strong>Username:</strong> {{ user.username }}<br />
           <strong>Email:</strong> {{ user.email || '—' }}
         </p>
-      </div>
+      </section>
 
       <!-- Tarjetas de ejemplo: apiladas en móvil; 3 columnas en md+ -->
       <div class="flex flex-col sm:flex-col md:flex-row gap-large p-large h-full">
@@ -58,6 +62,6 @@
           <p class="text-small opacity-90">Consulta la guía de estilos.</p>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 </div>

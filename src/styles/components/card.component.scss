@@ -1,0 +1,68 @@
+@use '../abstracts/breakpoints' as bp;
+@use '../abstracts/mixins' as mx;
+@use '../abstracts/tokens' as t;
+@use 'sass:color';
+
+.card {
+  background-color: t.color(white);
+  color: t.color(text);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid color.adjust(t.color(dark), $lightness: 65%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  // Hover sutil
+  &:hover {
+    transform: translateY(-2px);
+    @include mx.elevation(2);
+  }
+
+  @include bp.mq(md) {
+    padding: 1.5rem;
+  }
+
+  @include bp.mq(lg) {
+    padding: 2rem;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+    color: t.color(dark);
+  }
+
+  &__meta {
+    font-size: 1rem;
+    font-weight: 500;
+    color: color.adjust(t.color(text), $lightness: 20%);
+    margin-bottom: 0.5rem;
+  }
+
+  &__body {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  // 🔹 Modificadores
+  &--highlight {
+    border: 2px solid t.color(primary);
+    border-radius: 12px;
+    background: color.adjust(t.color(primary), $lightness: 45%);
+  }
+
+  &--elevated {
+    @include mx.elevation(2);
+  }
+}

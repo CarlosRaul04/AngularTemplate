@@ -1,0 +1,1 @@
+import{Ka as n,hb as o,ib as a,tb as i}from"./chunk-BA6MHJFO.js";var m=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=n({type:e,selectors:[["app-documentation"]],decls:2,vars:0,template:function(t,p){t&1&&(o(0,"p"),i(1,"documentation works!"),a())},encapsulation:2})};export{m as DocumentationComponent};

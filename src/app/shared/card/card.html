@@ -1,0 +1,25 @@
+<div
+    class="card"
+    [ngClass]="[
+        highlight ? 'card--highlight' : '',
+        elevated ? 'card-elevated' : ''
+    ]"
+>
+
+    <div class="card__title">
+        <ng-content select="[card-title]"></ng-content>
+    </div>
+
+    <div class="card__meta">
+        <ng-content select="[card-meta]"></ng-content>
+    </div>
+
+    <div class="card__body">
+        <ng-content select="[card-body]"></ng-content>
+    </div>
+
+    <div class="card__actions">
+        <ng-content select="[card-actions]"></ng-content>
+    </div>
+
+</div>
