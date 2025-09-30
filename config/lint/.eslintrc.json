@@ -1,6 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
+  "ignorePatterns": [
+    "projects/**/*",
+    "dist/**",
+    "node_modules/**"
+  ],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -27,6 +31,12 @@
       "plugins": ["@angular-eslint/template"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
+    },
+    {
+      "files": ["e2e/**/*.ts", "playwright.config.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.e2e.json"]
+      }
     }
   ]
 }

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "commit": "cz",
-    "check": "npm run lint && npm run test -- --watch=false",
+    "check": "npm run lint && npm run test && npm run e2e",
     "lint": "eslint .",
     "format": "prettier -w .",
     "ng": "ng",
@@ -23,7 +23,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "e2e": "playwright test"
   },
   "prettier": {
     "printWidth": 100,
@@ -58,6 +59,7 @@
     "@angular/compiler-cli": "^20.2.0",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@playwright/test": "^1.55.1",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
