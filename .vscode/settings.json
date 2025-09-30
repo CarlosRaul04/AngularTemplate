@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "setup",
-        "app"
+        "app",
+        "auth and login"
     ]
 }
