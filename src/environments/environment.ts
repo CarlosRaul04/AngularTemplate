@@ -1,7 +1,8 @@
+
 import { AppEnvironment } from './environment.model';
 
 export const environment: AppEnvironment = {
-  production: true,
+  production: false,
   auth: {
     mode: 'mock',
     base: '/auth', // no se usa en mock
@@ -14,3 +15,4 @@ export const environment: AppEnvironment = {
     }
   }
 };
+
