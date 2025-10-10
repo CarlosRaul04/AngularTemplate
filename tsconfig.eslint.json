@@ -4,7 +4,9 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.js",
-    "src/**/*.jsx"
+    "src/**/*.jsx",
+    "!module-federation.config.ts",
+    "!webpack*.ts"
   ],
   "exclude": [
     "node_modules",
