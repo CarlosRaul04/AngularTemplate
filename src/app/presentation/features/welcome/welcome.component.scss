@@ -1,0 +1,6 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto; /* grow para ocupar todo el espacio disponible */
+  height: 100%; /* importante: hereda el 100% del contenedor */
+}

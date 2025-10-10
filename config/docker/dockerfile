@@ -1,0 +1,30 @@
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copiar package.json para instalar dependencias
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar el resto del código dentro de app
+COPY . .
+
+# Construir la app
+RUN npm run build -- --configuration=development
+
+# Nginx para servir la app
+FROM nginx:alpine
+
+# Copiar configuración personalizada de nginx (SPA routing)
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copiar la app compilada desde la etapa anterior
+COPY --from=builder /app/dist/neos-template/browser /usr/share/nginx/html
+
+# Exponer puerto 80
+EXPOSE 80
+
+# Ejecutar nginx en primer plano
+CMD ["nginx", "-g", "daemon off;"]
