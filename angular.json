@@ -72,7 +72,7 @@
           "builder": "ngx-build-plus:dev-server",
           "options": {
             "port": 4301,
-            "publicHost": "http://localhost:4301",
+            "publicHost": "http://angular-template-red.vercel.app",
             "extraWebpackConfig": "webpack.config.js"
           },
           "configurations": {
