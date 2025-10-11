@@ -5,7 +5,8 @@ module.exports = withModuleFederationPlugin({
   name: 'neosTemplate',
   filename: 'remoteEntry.js',
   exposes: {
-    './App': './src/bootstrap.ts',
+    // './App': './src/bootstrap.ts',
+    './public-api': './src/public-api.ts', // Exponemos todos los componentes
   },
   shared: shareAll({
     singleton: true,

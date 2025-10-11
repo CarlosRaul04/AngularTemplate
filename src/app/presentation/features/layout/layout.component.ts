@@ -6,6 +6,7 @@ import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.servic
 
 @Component({
   selector: 'app-layout',
+  standalone: true,
   imports: [RouterOutlet, AsyncPipe, RouterModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
