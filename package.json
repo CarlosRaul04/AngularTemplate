@@ -21,7 +21,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build neos-template --configuration production",
     "test": "ng test",
     "prepare": "husky",
     "e2e": "playwright test",
