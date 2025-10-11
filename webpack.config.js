@@ -6,13 +6,14 @@
    filename: 'remoteEntry.js',
    exposes: {
      // './App': './src/bootstrap.ts',
-     './public-api': './src/public-api.ts', // Exponemos todos los componentes
+    //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
+    './RemoteWrapper': './src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts',
    },
    shared: shareAll({
      singleton: true,
      strictVersion: true,
      requiredVersion: 'auto',
    }),
-   
+
  });
 
