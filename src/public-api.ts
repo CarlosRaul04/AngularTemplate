@@ -5,3 +5,4 @@ export { DocumentationComponent} from './app/presentation/features/documentation
 export { LayoutComponent} from './app/presentation/features/layout/layout.component';
 export { WelcomeComponent } from './app/presentation/features/welcome/welcome.component';
 export { SettingsComponent } from './app/presentation/features/settings/settings.component';
+export { RemoteWrapperComponent } from './app/presentation/features/remote-wrapper/remote-wrapper.component';

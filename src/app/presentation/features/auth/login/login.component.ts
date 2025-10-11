@@ -10,6 +10,7 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
   imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  providers: [AuthFacade]
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
