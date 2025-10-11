@@ -5,7 +5,7 @@ import {
   Type,
   inject,
   OnInit,
-  Injector,
+  EnvironmentInjector,
 } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -45,7 +45,10 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
 })
 export class RemoteWrapperComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private injector = inject(Injector);
+  environmentInjector =
+  (window as any).hostEnvironmentInjector ||
+  inject(EnvironmentInjector);
+
 
   @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
   dynamicContainer!: ViewContainerRef;
@@ -81,7 +84,7 @@ export class RemoteWrapperComponent implements OnInit {
 
     try {
       this.dynamicContainer.createComponent(componentType, {
-        injector: this.injector,
+        environmentInjector: this.environmentInjector,
       });
       this.message = ''; // limpiar mensaje si todo sale bien
     } catch (error) {
