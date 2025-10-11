@@ -77,7 +77,8 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "neos-template:build:production"
+              "buildTarget": "neos-template:build:production",
+              "publicHost": "https://angular-template-red.vercel.app"
             },
             "development": {
               "buildTarget": "neos-template:build:development"

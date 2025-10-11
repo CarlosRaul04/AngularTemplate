@@ -2,28 +2,29 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app';
 import { appConfig } from './app/app.config';
-import { NgZone } from '@angular/core';
 
-// ⚡ Función para montar la app dentro del shell
-export async function mountNeosApp(container?: HTMLElement) {
-  // Si no se pasa un contenedor, se crea uno en body
-  const root = container || document.createElement('div');
-  if (!container) document.body.appendChild(root);
-
-  // Creamos una nueva Angular Zone independiente para evitar conflictos
-  const zone = new NgZone({ enableLongStackTrace: false });
-
-  await zone.run(() => bootstrapApplication(App, appConfig));
-}
-
+// Flag global para microfrontend
 declare global {
   interface Window {
     IS_MICROFRONTEND?: boolean;
   }
 }
 
-// ⚠️ Para ejecución standalone del remoto
-if (!window['IS_MICROFRONTEND']) {
+/**
+ * Función para montar la app desde un shell.
+ * Nota: Angular standalone no permite pasar un host DOM arbitrario.
+ * La app remota se monta como SPA completa.
+ */
+export async function mountNeosApp() {
+  // Indicamos que se está ejecutando como microfrontend
+  window.IS_MICROFRONTEND = true;
+
+  // Arrancamos la app remota
+  return bootstrapApplication(App, appConfig);
+}
+
+// Para ejecución standalone del remoto
+if (!window.IS_MICROFRONTEND) {
   bootstrapApplication(App, appConfig).catch((err) => console.error(err));
 }
 
