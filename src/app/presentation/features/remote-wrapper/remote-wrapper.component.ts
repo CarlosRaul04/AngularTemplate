@@ -5,14 +5,14 @@ import {
   Type,
   inject,
   OnInit,
+  EnvironmentInjector,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 
-// Importamos todos los componentes
+// Importación de componentes locales (asegúrate de que sean standalone o declarados correctamente)
 import { LoginComponent } from '../auth/login/login.component';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { SettingsComponent } from '../settings/settings.component';
@@ -27,10 +27,17 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
 @Component({
   selector: 'app-remote-wrapper',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule,
+    AsyncPipe,
+  ],
   template: `
     <div class="wrapper-container">
       <ng-container #dynamicContainer></ng-container>
+      <p *ngIf="message" class="wrapper-message">{{ message }}</p>
     </div>
   `,
   styleUrls: ['./remote-wrapper.component.scss'],
@@ -38,9 +45,12 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
 })
 export class RemoteWrapperComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private environmentInjector = inject(EnvironmentInjector);
 
   @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
   dynamicContainer!: ViewContainerRef;
+
+  message = '';
 
   private componentsMap: Record<string, Type<any>> = {
     login: LoginComponent,
@@ -60,21 +70,27 @@ export class RemoteWrapperComponent implements OnInit {
     }
   }
 
-  private loadComponent(name: string) {
+  private loadComponent(name: string): void {
     this.dynamicContainer.clear();
     const componentType = this.componentsMap[name.toLowerCase()];
 
     if (!componentType) {
-      this.showMessage(`❌ Componente remoto "${name}" no encontrado`);
+      this.showMessage(`❌ Componente remoto "${name}" no encontrado.`);
       return;
     }
 
-    this.dynamicContainer.createComponent(componentType);
+    try {
+      this.dynamicContainer.createComponent(componentType, {
+        environmentInjector: this.environmentInjector,
+      });
+      this.message = ''; // limpiar mensaje si todo sale bien
+    } catch (error) {
+      console.error('Error cargando componente remoto:', error);
+      this.showMessage(`⚠️ Error al cargar el componente "${name}".`);
+    }
   }
 
-  private showMessage(text: string) {
-    const el = document.createElement('p');
-    el.textContent = text;
-    this.dynamicContainer.element.nativeElement.appendChild(el);
+  private showMessage(text: string): void {
+    this.message = text;
   }
 }
