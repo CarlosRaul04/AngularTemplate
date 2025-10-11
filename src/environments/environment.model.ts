@@ -1,3 +1,4 @@
+
 export type AuthMode = 'mock' | 'remote';
 
 export interface AuthEnv {
