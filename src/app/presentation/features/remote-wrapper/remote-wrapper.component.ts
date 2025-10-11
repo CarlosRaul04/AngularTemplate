@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 // Importamos todos los componentes
@@ -25,7 +27,7 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
 @Component({
   selector: 'app-remote-wrapper',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterModule],
   template: `
     <div class="wrapper-container">
       <ng-container #dynamicContainer></ng-container>
