@@ -1,11 +1,20 @@
-/* remote-wrapper.component.scss */
-.wrapper-container {
+:host {
+  display: block;
   width: 100%;
   height: 100%;
-  padding: 1.5rem;
-  background-color: #f9fafb;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
+}
+
+.wrapper-container {
+  position: relative;
+  padding: 1rem;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.wrapper-message {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+  text-align: center;
+  font-style: italic;
 }
