@@ -1,18 +1,16 @@
-// src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts
 import {
   Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewContainerRef,
   ViewChild,
+  ViewContainerRef,
   Type,
   inject,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
-// Importamos todos los componentes que queremos exponer
+// Importamos todos los componentes
 import { LoginComponent } from '../auth/login/login.component';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { SettingsComponent } from '../settings/settings.component';
@@ -20,7 +18,7 @@ import { DocumentationComponent } from '../documentation/documentation.component
 import { ComponentsComponent } from '../components/components.component';
 import { LayoutComponent } from '../layout/layout.component';
 
-// Importamos servicios (facades/core)
+// Servicios compartidos
 import { AuthService } from '@app/core/services/auth.service';
 import { AuthFacade } from '@app/presentation/facades/auth.facade';
 
@@ -36,8 +34,8 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
   styleUrls: ['./remote-wrapper.component.scss'],
   providers: [AuthService, AuthFacade],
 })
-export class RemoteWrapperComponent implements OnChanges {
-  @Input() componentName: string = ''; // Nombre del componente que se quiere mostrar
+export class RemoteWrapperComponent implements OnInit {
+  private route = inject(ActivatedRoute);
 
   @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
   dynamicContainer!: ViewContainerRef;
@@ -51,21 +49,30 @@ export class RemoteWrapperComponent implements OnChanges {
     layout: LayoutComponent,
   };
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['componentName']) {
-      this.loadComponent();
+  ngOnInit(): void {
+    const componentName = this.route.snapshot.paramMap.get('componentName');
+    if (componentName) {
+      this.loadComponent(componentName);
+    } else {
+      this.showMessage('⚠️ No se especificó ningún componente remoto.');
     }
   }
 
-  private loadComponent() {
+  private loadComponent(name: string) {
     this.dynamicContainer.clear();
-    const componentType = this.componentsMap[this.componentName.toLowerCase()];
+    const componentType = this.componentsMap[name.toLowerCase()];
+
     if (!componentType) {
-      const message = document.createElement('p');
-      message.textContent = `Componente "${this.componentName}" no encontrado`;
-      this.dynamicContainer.element.nativeElement.appendChild(message);
+      this.showMessage(`❌ Componente remoto "${name}" no encontrado`);
       return;
     }
+
     this.dynamicContainer.createComponent(componentType);
+  }
+
+  private showMessage(text: string) {
+    const el = document.createElement('p');
+    el.textContent = text;
+    this.dynamicContainer.element.nativeElement.appendChild(el);
   }
 }
