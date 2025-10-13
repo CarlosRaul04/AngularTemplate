@@ -13,7 +13,7 @@ import {
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 // Tokens / clases de tu dominio (ajusta rutas si las mueves)
 import { AuthRepository } from '@domain/repositories/auth.repository'; 
@@ -91,6 +91,9 @@ export class RemoteWrapperComponent implements OnInit {
   ngOnInit(): void {
     // Preparar el injector combinado (host + missing remote providers)
     this.ensureMergedInjector();
+
+    // 2. Conectamos el router local con el del host (si existe)
+    this.patchRouterForHost();
 
     const componentName = this.route.snapshot.paramMap.get('componentName');
     if (componentName) {
@@ -178,4 +181,32 @@ export class RemoteWrapperComponent implements OnInit {
   private showMessage(text: string): void {
     this.message = text;
   }
+
+  private patchRouterForHost(): void {
+  try {
+    const hostInjector = (window as any).hostEnvironmentInjector as EnvironmentInjector | undefined;
+    if (!hostInjector) return;
+
+    const hostRouter = hostInjector.get(Router);
+    const localRouter = (this.baseInjector as Injector).get(Router);
+
+    // 🔁 Monkey-patch de navigateByUrl y navigate
+    const originalNavigateByUrl = localRouter.navigateByUrl.bind(localRouter);
+    const originalNavigate = localRouter.navigate.bind(localRouter);
+
+    localRouter.navigateByUrl = (url: any, extras?: any) => {
+      if (hostRouter) return hostRouter.navigateByUrl(url, extras);
+      return originalNavigateByUrl(url, extras);
+    };
+
+    localRouter.navigate = (commands: any[], extras?: any) => {
+      if (hostRouter) return hostRouter.navigate(commands, extras);
+      return originalNavigate(commands, extras);
+    };
+
+    console.info('[RemoteWrapper] Router remoto conectado con router del host.');
+  } catch (err) {
+    console.warn('[RemoteWrapper] No se pudo enlazar router con host:', err);
+  }
+}
 }
