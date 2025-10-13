@@ -7,3 +7,5 @@ export { WelcomeComponent } from './app/presentation/features/welcome/welcome.co
 export { SettingsComponent } from './app/presentation/features/settings/settings.component';
 export { RemoteWrapperComponent } from './app/presentation/features/remote-wrapper/remote-wrapper.component';
 export * from './app/app.routes';
+export * from './app/app.config';
+
