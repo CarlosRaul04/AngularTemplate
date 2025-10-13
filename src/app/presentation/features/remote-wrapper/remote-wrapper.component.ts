@@ -190,23 +190,54 @@ export class RemoteWrapperComponent implements OnInit {
     const hostRouter = hostInjector.get(Router);
     const localRouter = (this.baseInjector as Injector).get(Router);
 
-    // 🔁 Monkey-patch de navigateByUrl y navigate
+    // Si ambos routers son el mismo objeto, no hacemos nada.
+    if (hostRouter === localRouter) {
+      console.info('[RemoteWrapper] El router remoto ya es el del host.');
+      return;
+    }
+
+    // Guardamos referencias a los métodos originales
     const originalNavigateByUrl = localRouter.navigateByUrl.bind(localRouter);
     const originalNavigate = localRouter.navigate.bind(localRouter);
 
+    // Bandera para evitar recursión
+    let isRoutingThroughHost = false;
+
     localRouter.navigateByUrl = (url: any, extras?: any) => {
-      if (hostRouter) return hostRouter.navigateByUrl(url, extras);
+      if (isRoutingThroughHost) {
+        // Si la navegación viene del host, usamos el método original
+        return originalNavigateByUrl(url, extras);
+      }
+
+      if (hostRouter) {
+        isRoutingThroughHost = true;
+        const result = hostRouter.navigateByUrl(url, extras);
+        isRoutingThroughHost = false;
+        return result;
+      }
+
       return originalNavigateByUrl(url, extras);
     };
 
     localRouter.navigate = (commands: any[], extras?: any) => {
-      if (hostRouter) return hostRouter.navigate(commands, extras);
+      if (isRoutingThroughHost) {
+        return originalNavigate(commands, extras);
+      }
+
+      if (hostRouter) {
+        isRoutingThroughHost = true;
+        const result = hostRouter.navigate(commands, extras);
+        isRoutingThroughHost = false;
+        return result;
+      }
+
       return originalNavigate(commands, extras);
     };
 
-    console.info('[RemoteWrapper] Router remoto conectado con router del host.');
+    console.info('[RemoteWrapper] Router remoto enlazado con el router del host.');
   } catch (err) {
     console.warn('[RemoteWrapper] No se pudo enlazar router con host:', err);
   }
 }
+
 }
