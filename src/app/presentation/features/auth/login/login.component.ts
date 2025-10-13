@@ -51,7 +51,9 @@ export class LoginComponent {
       finalize(() => this._loading.set(false)),
     )
     .subscribe({
-      next: () => this.router.navigateByUrl('/menu/neos/layout/components'),
+      next: () => {
+        this.router.navigate(['layout', 'components']);
+      },
       error: () => this._error.set('Credenciales inválidas'),
     });
 }
