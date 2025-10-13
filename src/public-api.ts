@@ -6,3 +6,4 @@ export { LayoutComponent} from './app/presentation/features/layout/layout.compon
 export { WelcomeComponent } from './app/presentation/features/welcome/welcome.component';
 export { SettingsComponent } from './app/presentation/features/settings/settings.component';
 export { RemoteWrapperComponent } from './app/presentation/features/remote-wrapper/remote-wrapper.component';
+export * from './app/app.routes';
