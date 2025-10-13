@@ -6,23 +6,30 @@ import {
   inject,
   OnInit,
   EnvironmentInjector,
+  createEnvironmentInjector,
+  StaticProvider,
+  Injector,
 } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 
-// Importación de componentes locales (asegúrate de que sean standalone o declarados correctamente)
-import { LoginComponent } from '../auth/login/login.component';
-import { WelcomeComponent } from '../welcome/welcome.component';
-import { SettingsComponent } from '../settings/settings.component';
-import { DocumentationComponent } from '../documentation/documentation.component';
-import { ComponentsComponent } from '../components/components.component';
-import { LayoutComponent } from '../layout/layout.component';
+// Tokens / clases de tu dominio (ajusta rutas si las mueves)
+import { AuthRepository } from '@domain/repositories/auth.repository'; 
+import { AuthRepositoryImpl } from '@infra/auth/auth.repository.impl'; 
+import { LoginUseCase } from '@domain/usecases/login.usecase'; 
+import { LoginUseCaseImpl } from '@app/application/auth/login.usecase.impl'; 
+import { LogoutUseCase } from '@domain/usecases/logout.usecase'; 
+import { LogoutUseCaseImpl } from '@app/application/auth/logout.usecae.impl'; 
 
-// Servicios compartidos
-import { AuthService } from '@app/core/services/auth.service';
-import { AuthFacade } from '@app/presentation/facades/auth.facade';
+// Componentes remotos que expones en el wrapper
+import { LoginComponent } from '@presentation/features/auth/login/login.component'; 
+import { WelcomeComponent } from '@presentation/features/welcome/welcome.component'; 
+import { SettingsComponent } from '@presentation/features/settings/settings.component';
+import { DocumentationComponent } from '@presentation/features/documentation/documentation.component';
+import { ComponentsComponent } from '@presentation/features/components/components.component';
+import { LayoutComponent } from '@presentation/features/layout/layout.component';
 
 @Component({
   selector: 'app-remote-wrapper',
@@ -41,14 +48,31 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
     </div>
   `,
   styleUrls: ['./remote-wrapper.component.scss'],
-  providers: [AuthService, AuthFacade],
 })
 export class RemoteWrapperComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  environmentInjector =
-  (window as any).hostEnvironmentInjector ||
-  inject(EnvironmentInjector);
 
+  // 1) Intentamos obtener el EnvironmentInjector del host si lo compartió:
+  private hostEnvInjector = (window as any).hostEnvironmentInjector as EnvironmentInjector | undefined;
+
+  // 2) Base injector: si hay host, lo usamos como parent, si no usamos el local injector.
+  private baseInjector: EnvironmentInjector | Injector = this.hostEnvInjector || inject(EnvironmentInjector);
+
+  // 3) Lista de providers que el remoto necesita por defecto (los mismos que usas en appConfig)
+  //    * Nota: aquí declaramos los providers tal y como los defines en appConfig.
+  private remoteDefaultProviders: any[] = [
+    // HttpClient provider (si el host no lo tiene, lo añadimos)
+    provideHttpClient(withFetch()),
+
+    // Repos / UseCases (ajusta si cambias implementaciones)
+    { provide: AuthRepository, useClass: AuthRepositoryImpl, multi: false },
+    { provide: LoginUseCase, useClass: LoginUseCaseImpl, multi: false },
+    { provide: LogoutUseCase, useClass: LogoutUseCaseImpl, multi: false },
+  ];
+
+  // 4) EnvironmentInjector final que usaremos para crear componentes.
+  //    Se establecerá en ngOnInit llamando a `ensureMergedInjector()`.
+  private environmentInjector!: EnvironmentInjector;
 
   @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true })
   dynamicContainer!: ViewContainerRef;
@@ -65,12 +89,70 @@ export class RemoteWrapperComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    // Preparar el injector combinado (host + missing remote providers)
+    this.ensureMergedInjector();
+
     const componentName = this.route.snapshot.paramMap.get('componentName');
     if (componentName) {
       this.loadComponent(componentName);
     } else {
       this.showMessage('⚠️ No se especificó ningún componente remoto.');
     }
+  }
+
+  /**
+   * Crea un EnvironmentInjector que:
+   *  - usa el injector del host como parent si existe
+   *  - añade únicamente los providers que no se encuentran ya en el parent
+   */
+  private ensureMergedInjector(): void {
+    const parent = (this.baseInjector as any);
+
+    // Normaliza providers (some providers could be arrays)
+    const flatten = (arr: any[]): StaticProvider[] =>
+      arr.flatMap((p) => (Array.isArray(p) ? flatten(p) : p));
+
+    const candidateProviders = flatten(this.remoteDefaultProviders);
+
+    // Filtramos los providers que ya estén presentes en el parent injector
+    const providersToAdd: StaticProvider[] = [];
+
+    for (const p of candidateProviders) {
+      // Si p tiene 'provide' usamos ese token, si no, intentamos usar el propio provider (raro)
+      const token = (p as any).provide ?? (p as any).token ?? null;
+      if (!token) {
+        // Si no hay token explícito (casos raros), lo añadimos por seguridad
+        providersToAdd.push(p);
+        continue;
+      }
+
+      // Intentamos resolver en parent: si devuelve !== null/undefined existe y lo omitimos
+      let exists = false;
+      try {
+        // Injector.get admite un segundo parámetro 'notFoundValue'
+        const resolved = (parent as Injector).get(token as any, null);
+        exists = resolved !== null && resolved !== undefined;
+      } catch {
+        exists = false;
+      }
+
+      if (!exists) {
+        providersToAdd.push(p);
+      } else {
+        // debug
+        // console.debug('[RemoteWrapper] token presente en host, no añadimos:', token);
+      }
+    }
+
+    // Debug: mostrar qué providers añadiremos
+    if (providersToAdd.length > 0) {
+      console.info('[RemoteWrapper] Añadiendo providers faltantes:', providersToAdd);
+    } else {
+      console.info('[RemoteWrapper] El host ya provee todos los providers necesarios.');
+    }
+
+    // Creamos un EnvironmentInjector hijo con los providers faltantes y parent = baseInjector
+    this.environmentInjector = createEnvironmentInjector(providersToAdd, this.baseInjector as EnvironmentInjector);
   }
 
   private loadComponent(name: string): void {
@@ -86,7 +168,7 @@ export class RemoteWrapperComponent implements OnInit {
       this.dynamicContainer.createComponent(componentType, {
         environmentInjector: this.environmentInjector,
       });
-      this.message = ''; // limpiar mensaje si todo sale bien
+      this.message = '';
     } catch (error) {
       console.error('Error cargando componente remoto:', error);
       this.showMessage(`⚠️ Error al cargar el componente "${name}".`);
