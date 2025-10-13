@@ -3,14 +3,13 @@ import { Routes } from '@angular/router';
 import { authGuard } from '@app/core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'welcome' },
   {
     path: 'login',
     loadComponent: () =>
       import('@presentation/features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: '',
+    path: 'layout',
     canActivate: [authGuard],
     loadComponent: () =>
       import('@presentation/features/layout/layout.component').then((m) => m.LayoutComponent),
@@ -43,8 +42,12 @@ export const routes: Routes = [
             (m) => m.SettingsComponent,
           ),
       },
+      {
+        path: '**',
+        redirectTo: 'welcome'
+      }
     ],
   },
-  { path: '**', redirectTo: 'welcome' },
+  { path: '**', redirectTo: 'login' },
 ];
 
