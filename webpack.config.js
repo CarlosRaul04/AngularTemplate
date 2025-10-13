@@ -8,7 +8,7 @@
      // './App': './src/bootstrap.ts',
     //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
     './RemoteWrapper': './src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts',
-    './public-api': './src/public-api.ts',
+    './public-api': './src/app/app.routes.ts',
    },
    shared: shareAll({
      singleton: true,
