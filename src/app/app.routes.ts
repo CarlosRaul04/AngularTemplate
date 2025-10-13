@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'layout',
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
     loadComponent: () =>
       import('@presentation/features/layout/layout.component').then((m) => m.LayoutComponent),
     children: [
