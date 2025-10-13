@@ -33,20 +33,26 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
-  submit() {
-    if (this.form.invalid || this.loading()) return;
-    this._error.set('');
-    this._loading.set(true);
-
-    this.authFacade
-      .login(this.form.getRawValue())
-      .pipe(
-        take(1),
-        finalize(() => this._loading.set(false)),
-      )
-      .subscribe({
-        next: () => this.router.navigateByUrl('/welcome'),
-        error: () => this._error.set('Credenciales inválidas'),
-      });
+  submit(event?: Event) {
+  // Evita que el navegador recargue la página
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
+
+  if (this.form.invalid || this.loading()) return;
+  this._error.set('');
+  this._loading.set(true);
+
+  this.authFacade
+    .login(this.form.getRawValue())
+    .pipe(
+      take(1),
+      finalize(() => this._loading.set(false)),
+    )
+    .subscribe({
+      next: () => this.router.navigateByUrl('/layout'),
+      error: () => this._error.set('Credenciales inválidas'),
+    });
+}
 }
