@@ -31,7 +31,7 @@ export class LayoutComponent {
         if (result) {
           console.log('Usuario confirmo logout');
           this.authFacade.logout();
-          this.router.navigateByUrl('/login');
+          this.router.navigate(['login']);
         } else {
           console.log('Usuario canceló logout');
         }
