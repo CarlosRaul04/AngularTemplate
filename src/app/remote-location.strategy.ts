@@ -4,42 +4,48 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class RemoteLocationStrategy extends LocationStrategy {
   private _internalPath = '/';
+  private _state: any = {};
 
-  // Devuelve la "ruta interna" que mantiene el router del remoto.
   path(includeHash?: boolean): string {
     return this._internalPath;
   }
 
-  // Convierte una URL interna en la URL externa. 
-  // Aquí la devolvemos tal cual para mantener consistencia interna.
   prepareExternalUrl(internal: string): string {
     return internal;
   }
 
-  // Cuando el Router pide pushState, actualizamos sólo el estado interno
-  // SIN tocar window.history ni window.location.
   pushState(state: any, title: string, url: string, queryParams: string): void {
     this._internalPath = this._buildUrl(url, queryParams);
+    this._state = state;
+
+    console.log(
+      `%c[RemoteLocationStrategy] pushState →`,
+      'color: #4CAF50; font-weight: bold;',
+      this._internalPath
+    );
   }
 
-  // Igual que pushState pero reemplaza el estado interno.
   replaceState(state: any, title: string, url: string, queryParams: string): void {
     this._internalPath = this._buildUrl(url, queryParams);
+    this._state = state;
+
+    console.log(
+      `%c[RemoteLocationStrategy] replaceState →`,
+      'color: #FFC107; font-weight: bold;',
+      this._internalPath
+    );
   }
 
-  // Opcional: no hacemos nada con forward/back para no tocar la historia del host.
   forward(): void {
-    // noop — o implementar lógica interna si quieres mantener un stack propio
+    console.log('%c[RemoteLocationStrategy] forward() → no-op', 'color: #2196F3;');
   }
 
   back(): void {
-    // noop
+    console.log('%c[RemoteLocationStrategy] back() → no-op', 'color: #2196F3;');
   }
 
-  // Estas funciones son requeridas por la interfaz (para suscribirse a cambios).
   onPopState(fn: LocationChangeListener): void {
-    // No expondremos popstate del navegador; si necesitas, podrías emitir eventos
-    // custom para que tu app los maneje. Por ahora simplemente no llamamos fn.
+    console.log('%c[RemoteLocationStrategy] onPopState() → no listener attached', 'color: #9E9E9E;');
   }
 
   getBaseHref(): string {
@@ -47,11 +53,10 @@ export class RemoteLocationStrategy extends LocationStrategy {
   }
 
   getState(): unknown {
-    // Retorna un objeto vacío o el estado interno si lo necesitas.
-    return {};
+    return this._state;
   }
 
-  private _buildUrl(url: string, queryParams: string) {
+  private _buildUrl(url: string, queryParams: string): string {
     return queryParams ? `${url}?${queryParams}` : url;
   }
 }
