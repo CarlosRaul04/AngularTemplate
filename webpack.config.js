@@ -14,7 +14,10 @@
      singleton: true,
      strictVersion: true,
      requiredVersion: 'auto',
-   })
-   ,
+   }),
+   extraOptions: {
+    // NO inicializar automáticamente el share scope
+    initializeSharedScope: false,
+  },
  });
 
