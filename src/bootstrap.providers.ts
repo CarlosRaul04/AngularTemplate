@@ -10,7 +10,7 @@ import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.servic
 import { RemoteLocationStrategy } from '@app/remote-location-strategy';
 import { LocationStrategy } from '@angular/common';
 import { provideRouter, withRouterConfig } from '@angular/router';
-import { routes } from '@app/app.routes.ts';
+import { routes } from '@app/app.routes';
 
 export const remoteProviders = [
   provideHttpClient(withFetch()),
@@ -22,4 +22,5 @@ export const remoteProviders = [
   AuthFacade,
   ConfirmDialogService,
 ];
+
 
