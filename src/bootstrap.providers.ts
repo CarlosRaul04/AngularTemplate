@@ -9,10 +9,12 @@ import { AuthFacade } from '@app/presentation/facades/auth.facade';
 import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.service';
 import { RemoteLocationStrategy } from '@app/remote-location-strategy';
 import { LocationStrategy } from '@angular/common';
+import { provideRouter, withRouterConfig } from '@angular/router';
+import { remoteRoutes } from '@app/remote-entry/entry.routes';
 
 export const remoteProviders = [
   provideHttpClient(withFetch()),
-
+  provideRouter(remoteRoutes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
   { provide: AuthRepository, useClass: AuthRepositoryImpl },
   { provide: LoginUseCase, useClass: LoginUseCaseImpl },
   { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
