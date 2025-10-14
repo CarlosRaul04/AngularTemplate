@@ -5,11 +5,9 @@
    name: 'neosTemplate',
    filename: 'remoteEntry.js',
    exposes: {
-     // './App': './src/bootstrap.ts',
     //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
-    // './RemoteWrapper': './src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts',
-    './Routes': './src/app/remote-entry/entry.routes.ts',
-    
+    // './Routes': './src/app/remote-entry/entry.routes.ts',
+    './BootstrapRemote': './src/bootstrap-remote.ts',
    },
    shared: shareAll({
      singleton: true,
