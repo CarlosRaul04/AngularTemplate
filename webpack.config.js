@@ -8,8 +8,8 @@
      // './App': './src/bootstrap.ts',
     //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
     // './RemoteWrapper': './src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts',
-    // './Routes': './src/app/app.routes.ts',
-    './RoutesModule': './src/app/remote-routes.module.ts',
+    './Routes': './src/app/app.routes.ts',
+    
    },
    shared: shareAll({
      singleton: true,
