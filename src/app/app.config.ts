@@ -23,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     { provide: AuthRepository, useClass: AuthRepositoryImpl },
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
+    { provide: LocationStrategy, useClass: RemoteLocationStrategy },
     provideRouter(routes, withComponentInputBinding(), withHashLocation()),
   ],
 };
