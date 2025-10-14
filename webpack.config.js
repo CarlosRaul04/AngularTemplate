@@ -6,8 +6,7 @@
    filename: 'remoteEntry.js',
    exposes: {
     //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
-    // './Routes': './src/app/remote-entry/entry.routes.ts',
-    './BootstrapRemote': './src/bootstrap-remote.ts',
+    './Routes': './src/app/remote-entry/entry.routes.ts',
    },
    shared: shareAll({
      singleton: true,
