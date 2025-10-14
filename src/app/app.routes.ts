@@ -51,5 +51,5 @@ export const routes: Routes = [
       }
     ],
   },
-  { path: '**', redirectTo: 'layout/components' },
+  { path: '**', redirectTo: 'login' },
 ];
