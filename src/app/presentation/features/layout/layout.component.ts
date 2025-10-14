@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthFacade } from '@app/presentation/facades/auth.facade';
 import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.service';
+import { NavigationService } from '../navigation.service';
 
 @Component({
   selector: 'app-layout',
@@ -16,6 +17,7 @@ export class LayoutComponent {
   private confirmDialog = inject(ConfirmDialogService);
   authFacade = inject(AuthFacade);
   private router = inject(Router);
+  private nav = inject(NavigationService);
 
   user$ = this.authFacade.user$();
 
@@ -31,7 +33,8 @@ export class LayoutComponent {
         if (result) {
           console.log('Usuario confirmo logout');
           this.authFacade.logout();
-          this.router.navigate(['../login']);
+          this.nav.goToLogin();
+          //his.router.navigate(['/login']);
         } else {
           console.log('Usuario canceló logout');
         }
