@@ -1,27 +1,20 @@
 /* eslint-disable */
  const { withModuleFederationPlugin, shareAll } = require('@angular-architects/module-federation/webpack');
 
-// 👉 Primero, crea la configuración del plugin
-const mfConfig = withModuleFederationPlugin({
-  name: 'neosTemplate',
-  filename: 'remoteEntry.js',
-  exposes: {
+ module.exports = withModuleFederationPlugin({
+   name: 'neosTemplate',
+   filename: 'remoteEntry.js',
+   exposes: {
+     // './App': './src/bootstrap.ts',
+    //  './public-api': './src/public-api.ts', // Exponemos todos los componentes
+    // './RemoteWrapper': './src/app/presentation/features/remote-wrapper/remote-wrapper.component.ts',
     './Routes': './src/app/app.routes.ts',
-  },
-  library: { type: 'var', name: 'neosTemplate' },
-  shared: shareAll({
-    singleton: true,
-    strictVersion: true,
-    requiredVersion: 'auto',
-  }),
-});
+   },
+   shared: shareAll({
+     singleton: true,
+     strictVersion: true,
+     requiredVersion: 'auto',
+   })
+   ,
+ });
 
-// 👉 Luego, extiende la configuración global de Webpack
-module.exports = {
-  ...mfConfig,
-  output: {
-    uniqueName: 'neosTemplate',
-    publicPath: 'auto',
-    scriptType: 'text/javascript', // ⚡ evita modo ESM
-  },
-};
