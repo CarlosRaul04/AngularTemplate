@@ -10,8 +10,6 @@ import { LoginUseCaseImpl } from './application/auth/login.usecase.impl';
 import { LogoutUseCaseImpl } from './application/auth/logout.usecae.impl';
 import { LogoutUseCase } from './domain/usecases/logout.usecase';
 //import { errorInterceptor } from './core/interceptors/error.interceptor';
-import { LocationStrategy } from '@angular/common';
-import { RemoteLocationStrategy } from './remote-location.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +23,6 @@ export const appConfig: ApplicationConfig = {
     { provide: AuthRepository, useClass: AuthRepositoryImpl },
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
-    { provide: LocationStrategy, useClass: RemoteLocationStrategy },
     provideRouter(routes, withComponentInputBinding()),
   ],
 };
