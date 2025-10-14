@@ -6,13 +6,14 @@ export class NavigationService {
   private router = inject(Router);
 
   goToLogin() {
-    this.router.navigate(['menu/neos/login']);
+    this.router.navigate(['login']);
   }
 
   goToWelcome() {
-    this.router.navigate(['menu/neos/layout/welcome']);
+    this.router.navigate(['layout', 'welcome']);
   }
 
 }
+
 
 
