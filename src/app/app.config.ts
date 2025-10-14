@@ -26,6 +26,6 @@ export const appConfig: ApplicationConfig = {
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
     { provide: LocationStrategy, useClass: RemoteLocationStrategy },
-    provideRouter(routes, withComponentInputBinding(), withHashLocation()),
+    provideRouter(routes, withComponentInputBinding()),
   ],
 };
