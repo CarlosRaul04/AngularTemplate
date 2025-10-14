@@ -1,6 +1,6 @@
 
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AuthRepository } from './domain/repositories/auth.repository';
@@ -23,6 +23,6 @@ export const appConfig: ApplicationConfig = {
     { provide: AuthRepository, useClass: AuthRepositoryImpl },
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
-    provideRouter(routes, withComponentInputBinding()),
+    provideRouter(routes, withComponentInputBinding(), withHashLocation()),
   ],
 };
