@@ -10,11 +10,11 @@ import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.servic
 import { RemoteLocationStrategy } from '@app/remote-location-strategy';
 import { LocationStrategy } from '@angular/common';
 import { provideRouter, withRouterConfig } from '@angular/router';
-import { remoteRoutes } from '@app/remote-entry/entry.routes';
+import { routes } from '@app/app.routes.ts';
 
 export const remoteProviders = [
   provideHttpClient(withFetch()),
-  provideRouter(remoteRoutes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
+  provideRouter(routes, withRouterConfig({ onSameUrlNavigation: 'reload' })),
   { provide: AuthRepository, useClass: AuthRepositoryImpl },
   { provide: LoginUseCase, useClass: LoginUseCaseImpl },
   { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
@@ -22,3 +22,4 @@ export const remoteProviders = [
   AuthFacade,
   ConfirmDialogService,
 ];
+
