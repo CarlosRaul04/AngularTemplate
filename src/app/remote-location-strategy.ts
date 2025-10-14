@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class RemoteLocationStrategy extends LocationStrategy {
+  constructor() {
+    super();
+    console.log('%c✅ RemoteLocationStrategy ACTIVO', 'color: limegreen');
+  }
+
   private internalPath = '';
 
   path(): string {
