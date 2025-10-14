@@ -12,4 +12,8 @@ export const remoteProviders = [
   { provide: AuthRepository, useClass: AuthRepositoryImpl },
   { provide: LoginUseCase, useClass: LoginUseCaseImpl },
   { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
+
+  AuthFacade,
+  ConfirmDialogService,
 ];
+
