@@ -4,15 +4,15 @@ import { authGuard } from '@app/core/guards/auth.guard';
 import { remoteProviders } from '../bootstrap.providers';
 
 export const routes: Routes = [
-  {
-     path: 'login',
-     providers: [...remoteProviders],
-     loadComponent: () =>
-     import('@presentation/features/auth/login/login.component').then((m) => m.LoginComponent),
-  },
+  // {
+  //   path: 'login',
+  //   providers: [...remoteProviders],
+  //   loadComponent: () =>
+  //     import('@presentation/features/auth/login/login.component').then((m) => m.LoginComponent),
+  // },
   {
     path: 'layout',
-    //canActivate: [authGuard],
+    canActivate: [authGuard],
     providers: [...remoteProviders],
     loadComponent: () =>
       import('@presentation/features/layout/layout.component').then((m) => m.LayoutComponent),
@@ -51,5 +51,5 @@ export const routes: Routes = [
       }
     ],
   },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'layout/welcome' },
 ];
