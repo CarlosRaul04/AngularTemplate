@@ -24,6 +24,6 @@ export const appConfig: ApplicationConfig = {
     { provide: AuthRepository, useClass: AuthRepositoryImpl },
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
-    provideRouter(routes, withComponentInputBinding(), withHashLocation()),
+    provideRouter(routes, withComponentInputBinding()),
   ],
 };
