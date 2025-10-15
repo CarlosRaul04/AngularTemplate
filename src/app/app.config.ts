@@ -10,6 +10,7 @@ import { LoginUseCaseImpl } from './application/auth/login.usecase.impl';
 import { LogoutUseCaseImpl } from './application/auth/logout.usecae.impl';
 import { LogoutUseCase } from './domain/usecases/logout.usecase';
 import { LocationStrategy } from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 //import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
