@@ -9,6 +9,7 @@ import { LoginUseCase } from './domain/usecases/login.usecase';
 import { LoginUseCaseImpl } from './application/auth/login.usecase.impl';
 import { LogoutUseCaseImpl } from './application/auth/logout.usecae.impl';
 import { LogoutUseCase } from './domain/usecases/logout.usecase';
+import { remoteProviders } from 'bootstrap.providers';
 //import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -20,9 +21,10 @@ export const appConfig: ApplicationConfig = {
       //   errorInterceptor
       // ])
     ),
-    { provide: AuthRepository, useClass: AuthRepositoryImpl },
-    { provide: LoginUseCase, useClass: LoginUseCaseImpl },
-    { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
-    provideRouter(routes, withComponentInputBinding()),
+    // { provide: AuthRepository, useClass: AuthRepositoryImpl },
+    // { provide: LoginUseCase, useClass: LoginUseCaseImpl },
+    // { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
+    provideRouter(routes, withComponentInputBinding(), withHashLocation()),
+     ...remoteProviders, // ✅ añade aquí todos tus providers del remoto
   ],
 };
