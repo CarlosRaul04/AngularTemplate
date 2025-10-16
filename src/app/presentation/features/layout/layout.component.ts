@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet, ActivatedRoute } from '@angular/router';
 import { AuthFacade } from '@app/presentation/facades/auth.facade';
 import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.service';
 import { NavigationService } from '../navigation.service';
