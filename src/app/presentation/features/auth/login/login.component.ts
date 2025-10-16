@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { finalize, take } from 'rxjs/operators';
 import { AuthFacade } from '@app/presentation/facades/auth.facade';
 
@@ -16,6 +16,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authFacade = inject(AuthFacade);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   private _loading = signal(false);
   loading = () => this._loading();
@@ -52,7 +53,7 @@ export class LoginComponent {
     )
     .subscribe({
       next: () => {
-        this.router.navigate(['layout', 'components']);
+        this.router.navigate(['layout', 'components'], { relativeTo: this.route });
       },
       error: () => this._error.set('Credenciales inválidas'),
     });
