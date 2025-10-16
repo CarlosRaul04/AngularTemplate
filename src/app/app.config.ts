@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
       //   errorInterceptor
       // ])
     ),
-    { provide: APP_BASE_HREF, useValue: '/neos' },
+    { provide: APP_BASE_HREF, useValue: '/menu/neos' },
     { provide: AuthRepository, useClass: AuthRepositoryImpl },
     { provide: LoginUseCase, useClass: LoginUseCaseImpl },
     { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
