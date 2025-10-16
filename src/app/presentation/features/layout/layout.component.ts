@@ -17,7 +17,8 @@ export class LayoutComponent {
   private confirmDialog = inject(ConfirmDialogService);
   authFacade = inject(AuthFacade);
   private router = inject(Router);
-  private nav = inject(NavigationService);
+  //private nav = inject(NavigationService);
+  private route = inject(ActivatedRoute);
 
   user$ = this.authFacade.user$();
 
