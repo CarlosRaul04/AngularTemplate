@@ -10,10 +10,11 @@ export class NavigationService {
   }
 
   goToWelcome() {
-    this.router.navigate(['layout', 'welcome']);
+    this.router.navigate(['/layout/welcome']);
   }
 
 }
+
 
 
 
