@@ -53,7 +53,7 @@ export class LoginComponent {
     )
     .subscribe({
       next: () => {
-        this.router.navigate(['/layout/welcome'], { relativeTo: this.route });
+        this.router.navigate(['../layout/welcome'], { relativeTo: this.route });
       },
       error: () => this._error.set('Credenciales inválidas'),
     });
