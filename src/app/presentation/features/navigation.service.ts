@@ -7,6 +7,7 @@ export class NavigationService {
 
   goToLogin() {
     this.router.navigate(['/login']);
+    console.log(this.router.navigate(['/login']));
   }
 
   goToWelcome() {
@@ -14,6 +15,7 @@ export class NavigationService {
   }
 
 }
+
 
 
 
