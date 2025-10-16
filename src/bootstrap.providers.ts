@@ -7,7 +7,6 @@ import { LogoutUseCase } from '@domain/usecases/logout.usecase';
 import { LogoutUseCaseImpl } from './app/application/auth/logout.usecae.impl'; 
 import { AuthFacade } from '@app/presentation/facades/auth.facade';
 import { ConfirmDialogService } from '@app/shared/services/confirm-dialog.service';
-import { APP_BASE_HREF } from '@angular/common';
 
 export const remoteProviders = [
   provideHttpClient(withFetch()),
@@ -17,6 +16,7 @@ export const remoteProviders = [
   AuthFacade,
   ConfirmDialogService,
 ];
+
 
 
 
