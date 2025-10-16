@@ -6,7 +6,7 @@ export class NavigationService {
   private router = inject(Router);
 
   goToLogin() {
-    this.router.navigate(['login']);
+    this.router.navigate(['/login']);
   }
 
   goToWelcome() {
@@ -14,6 +14,7 @@ export class NavigationService {
   }
 
 }
+
 
 
 
