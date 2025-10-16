@@ -33,8 +33,8 @@ export class LayoutComponent {
         if (result) {
           console.log('Usuario confirmo logout');
           this.authFacade.logout();
-          this.nav.goToLogin();
-          //his.router.navigate(['/login']);
+          //this.nav.goToLogin();
+          this.router.navigate(['/login'], { relativeTo: this.route });
         } else {
           console.log('Usuario canceló logout');
         }
