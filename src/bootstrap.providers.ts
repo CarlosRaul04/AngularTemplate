@@ -13,7 +13,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 export const remoteProviders = [
   provideHttpClient(withFetch()),
-  { provide: APP_BASE_HREF, useValue: '/menu/neos' },
+  { provide: APP_BASE_HREF, useValue: '/neos' },
   { provide: AuthRepository, useClass: AuthRepositoryImpl },
   { provide: LoginUseCase, useClass: LoginUseCaseImpl },
   { provide: LogoutUseCase, useClass: LogoutUseCaseImpl },
@@ -21,5 +21,6 @@ export const remoteProviders = [
   AuthFacade,
   ConfirmDialogService,
 ];
+
 
 
